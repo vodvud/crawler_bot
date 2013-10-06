@@ -1,5 +1,8 @@
-crawler_bot
+Crawler Bot
 ===========
 
 example:
-php -q ./run.php test.com
+
+  ```sh
+  % php run.php test.com
+  ```
