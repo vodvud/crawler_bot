@@ -8,8 +8,7 @@ class Report {
      * @param array $params
      */
     public function init($params = array()){
-        $tpl = 'vendor'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, __CLASS__).'.phtml';
-        $tpl = strtolower($tpl);
+        $tpl = 'vendor'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, strtolower(__CLASS__)).'.phtml';
         
         if(is_file($tpl)){
             $render = function($params, $tpl){
