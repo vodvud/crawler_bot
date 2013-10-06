@@ -1,8 +1,8 @@
 <?php
 namespace Crawler;
 
-class Report {
-    
+class Report 
+{    
     /**
      * Render html and create report
      * @param array $params

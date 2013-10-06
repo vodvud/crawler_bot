@@ -14,6 +14,10 @@ class Bot
         $url = $this->firstUrl($url);
         $this->urlScan($url);
         
+        // Sort result by descending
+        natsort($this->imgCount);
+        $this->imgCount = array_reverse($this->imgCount);
+        
         $all = array_sum($this->imgCount);
         
         // echo all img count
@@ -43,7 +47,7 @@ class Bot
                     $imagesMatch = null;
                     $urlsMatch = null;
                     
-                    //get "img" and "a"
+                    // get "img" and "a"
                     preg_match_all('/\<img\s.+?\>/i', $html, $imagesMatch);
                     preg_match_all('/\<a\s.+?\>/i', $html, $urlsMatch);
 
@@ -55,8 +59,8 @@ class Bot
 
                     if(isset($urlsMatch[0]) && count($urlsMatch[0]) > 0){
                         foreach($urlsMatch[0] as $item){
-                            //get "href"
-                            preg_match('/href\s?=\s?(\"|\')(?P<url>(.+?))\s?(\"|\')/i', $item, $hrefMatch);
+                            // get "href"
+                            preg_match('/href\s?=\s?(\"|\')(?P<url>(.+?))(\"|\')\s?/i', $item, $hrefMatch);
                             if(isset($hrefMatch['url'])){
                                 $this->urlScan($hrefMatch['url']);
                             }
@@ -75,7 +79,7 @@ class Bot
     private function checkURL($url){
         $ret = null;
 
-        if($url !== '#' && !empty($url)){        
+        if(!empty($url) && $url != '#'){        
             $parse = parse_url($url);
             
             if(isset($parse['path'])){
@@ -84,11 +88,7 @@ class Bot
                 if(!isset($parse['host'])){
                     $path = $parse['path'];
                 }elseif($parse['host'] == $this->urlParams['host']){
-                    if(empty($parse['path'])){
-                        $path = '/';
-                    }else{
-                        $path = $parse['path'];
-                    }
+                    $path = $parse['path'];
                 }
                 
                 if($path !== null){
