@@ -43,6 +43,7 @@ class Bot
                     $imagesMatch = null;
                     $urlsMatch = null;
                     
+                    //get "img" and "a"
                     preg_match_all('/\<img\ .+?\>/i', $html, $imagesMatch);
                     preg_match_all('/\<a\ .+?\>/i', $html, $urlsMatch);
 
@@ -54,7 +55,8 @@ class Bot
 
                     if(isset($urlsMatch[0]) && count($urlsMatch[0]) > 0){
                         foreach($urlsMatch[0] as $item){
-                            preg_match('/href=\"(?P<url>(.+?))\"/i', $item, $hrefMatch);
+                            //get "href"
+                            preg_match('/href\s?=\s?(\"|\')(?P<url>(.+?))\s?(\"|\')/i', $item, $hrefMatch);
                             if(isset($hrefMatch['url'])){
                                 $this->urlScan($hrefMatch['url']);
                             }
@@ -75,6 +77,7 @@ class Bot
 
         if($url !== '#' && !empty($url)){        
             $parse = parse_url($url);
+            
             if(isset($parse['path'])){
                 $path = null;
                 
@@ -89,6 +92,10 @@ class Bot
                 }
                 
                 if($path !== null){
+                    if(preg_match('/^\//', $path) == false){
+                        $path = '/'.$path;
+                    }
+                    
                     $ret = $this->urlParams['scheme'].'://'.$this->urlParams['host'].$path;
                 }
             }
