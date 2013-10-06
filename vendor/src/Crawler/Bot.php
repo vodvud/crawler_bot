@@ -44,8 +44,8 @@ class Bot
                     $urlsMatch = null;
                     
                     //get "img" and "a"
-                    preg_match_all('/\<img\ .+?\>/i', $html, $imagesMatch);
-                    preg_match_all('/\<a\ .+?\>/i', $html, $urlsMatch);
+                    preg_match_all('/\<img\s.+?\>/i', $html, $imagesMatch);
+                    preg_match_all('/\<a\s.+?\>/i', $html, $urlsMatch);
 
                     $count = isset($imagesMatch[0]) ? count($imagesMatch[0]) : 0;
                     $this->imgCount[$url] = $count;
@@ -92,10 +92,12 @@ class Bot
                 }
                 
                 if($path !== null){
+                    // check to first "/" in path
                     if(preg_match('/^\//', $path) == false){
                         $path = '/'.$path;
                     }
                     
+                    // create url
                     $ret = $this->urlParams['scheme'].'://'.$this->urlParams['host'].$path;
                 }
             }
