@@ -25,7 +25,7 @@ class Report
             $report = 'reports'.DIRECTORY_SEPARATOR.'report_'.date('d.m.Y').'.html';
             file_put_contents($report, $render($params, $tpl));
             
-            echo('Created; '.$report."\n");
+            echo('Created: '.$report."\n");
         }
     }
 } 
