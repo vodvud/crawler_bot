@@ -78,16 +78,18 @@ class Bot
      */
     private function checkURL($url){
         $ret = null;
-
+        
         if(!empty($url) && $url != '#'){        
+            $url = $this->fixScheme($url);
             $parse = parse_url($url);
             
             if(isset($parse['path'])){
                 $path = null;
+                $hostMask = '/'.str_replace('/', '\/', $this->urlParams['host']).'$/i';
                 
                 if(!isset($parse['host'])){
                     $path = $parse['path'];
-                }elseif($parse['host'] == $this->urlParams['host']){
+                }elseif(preg_match ($hostMask, $parse['host']) == true){
                     $path = $parse['path'];
                 }
                 
@@ -98,7 +100,9 @@ class Bot
                     }
                     
                     // create url
-                    $ret = $this->urlParams['scheme'].'://'.$this->urlParams['host'].$path;
+                    $ret = (isset($parse['scheme']) ? $parse['scheme'] : $this->urlParams['scheme']).'://'.
+                           (isset($parse['host']) ? $parse['host'] : $this->urlParams['host']).
+                           $path;
                 }
             }
         }
@@ -111,7 +115,7 @@ class Bot
      * @param string $url
      * @return string
      */
-    private function firstUrl($url){
+    private function firstUrl($url){        
         $this->urlParams = parse_url($url);
         
         if(!isset($this->urlParams['scheme'])){
@@ -123,5 +127,14 @@ class Bot
         }
         
         return $url;
+    }
+    
+    /**
+     * Check to first "//" in scheme and remove
+     * @param string $url
+     * @return string
+     */
+    private function fixScheme($url){
+        return preg_replace('/^\/\//', '', $url);
     }
 }
