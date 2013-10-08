@@ -85,7 +85,8 @@ class Bot
             
             if(isset($parse['path'])){
                 $path = null;
-                $hostMask = '/'.$this->urlParams['host'].'$/i';
+                $host = str_replace('.', '\.', $this->urlParams['host']);
+                $hostMask = '/(\.|^)'.$host.'$/i';
                 
                 if(!isset($parse['host'])){
                     $path = $parse['path'];
